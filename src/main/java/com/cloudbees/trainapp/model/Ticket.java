@@ -1,12 +1,23 @@
 package com.cloudbees.trainapp.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Ticket {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "from_station")
     private String from;
+    @Column(name = "to_station")
     private String to;
+    @ManyToOne
     private User user;
     private double price;
     private String seatSection;
+
+    public Ticket() {}
 
     public Ticket(String from, String to, User user, double price, String seatSection) {
         this.from = from;
@@ -14,6 +25,14 @@ public class Ticket {
         this.user = user;
         this.price = price;
         this.seatSection = seatSection;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFrom() {

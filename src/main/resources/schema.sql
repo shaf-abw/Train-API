@@ -1,0 +1,16 @@
+CREATE TABLE IF NOT EXISTS app_user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS ticket (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    from_station VARCHAR(255) NOT NULL,
+    to_station VARCHAR(255) NOT NULL,
+    user_id BIGINT,
+    price DOUBLE NOT NULL,
+    seat_section VARCHAR(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES app_user(id)
+);
