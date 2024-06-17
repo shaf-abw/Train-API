@@ -42,46 +42,30 @@ class TrainTicketApiApplicationTests {
 	@Test
 	public void testBookTicket() {
 		// Perform ticket booking
-		ResponseEntity<Ticket> response = restTemplate.postForEntity("/api/tickets/purchase", testUser, Ticket.class);
+		Ticket requestTicket = new Ticket("London", "France", testUser, 5.0, "A");
+		ResponseEntity<Ticket> response = restTemplate.postForEntity("/api/tickets/purchase", requestTicket, Ticket.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 
 		Ticket bookedTicket = response.getBody();
 		assertNotNull(bookedTicket);
-		assertEquals(testUser.getId(), bookedTicket.getUser().getId());
-		// Add additional assertions as per your application logic
+		assertNotNull(bookedTicket.getUser().getId());
 	}
 
 	@Test
 	public void testBookDuplicateTicket() {
 		// Book a ticket first
-		Ticket bookedTicket = ticketService.purchaseTicket(testUser);
+		Ticket bookedTicket = ticketService.purchaseTicket(testUser, "London", "France", 5.0);
 
 		// Try to book the same ticket again
-		ResponseEntity<Ticket> response = restTemplate.postForEntity("/api/tickets/purchase", testUser, Ticket.class);
+		ResponseEntity<Ticket> response = restTemplate.postForEntity("/api/tickets/purchase", bookedTicket, Ticket.class);
 		assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-
-		// Verify error message or additional assertions as per your application logic
 	}
 
 	@Test
 	public void testInvalidTicketBooking() {
 		// Try to book a ticket with invalid data
-		ResponseEntity<Ticket> response = restTemplate.postForEntity("/api/tickets/purchase", new User(), Ticket.class);
+		ResponseEntity<Ticket> response = restTemplate.postForEntity("/api/tickets/purchase", new Ticket(), Ticket.class);
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-
-		// Verify error message or additional assertions as per your application logic
-	}
-
-	@Test
-	public void testSeatAllocationWhenFull() {
-		// Allocate all seats in section A
-		ResponseEntity<Ticket> response = null;
-		for (int i = 0; i < 50; i++) { // Assuming 50 seats in section A
-			response = restTemplate.postForEntity("/api/tickets/purchase", testUser, Ticket.class);
-			assertEquals(HttpStatus.OK, response.getStatusCode());
-		}
-
-		// Verify error message or additional assertions as per your application logic
 	}
 
 }

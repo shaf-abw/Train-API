@@ -16,20 +16,12 @@ public class SeatController {
     private SeatService seatService;
 
     @GetMapping("/section/{section}")
-    public ResponseEntity<List<Ticket>> getUsersBySection(@PathVariable String section) throws Exception {
-        try {
-            return ResponseEntity.ok(seatService.getUsersBySection(section));
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
+    public ResponseEntity<List<Ticket>> getUsersBySection(@PathVariable String section) {
+        return ResponseEntity.ok(seatService.getUsersBySection(section.toUpperCase()));
     }
 
-    @PutMapping("/modify/{email}")
-    public ResponseEntity<Ticket> modifySeat(@PathVariable String email, @RequestParam String newSection) throws Exception {
-        try {
-            return ResponseEntity.ok(seatService.modifySeat(email, newSection));
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
+    @PutMapping("/modify/{id}/{email}")
+    public ResponseEntity<Ticket> modifySeat(@PathVariable Long id, @PathVariable String email, @RequestParam String newSection) {
+        return ResponseEntity.ok(seatService.modifySeat(id, email, newSection.toUpperCase()));
     }
 }
